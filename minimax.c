@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Define
 typedef struct
 {
     int position;
@@ -14,17 +15,23 @@ void read_input(char board[], char *file_name);
 int board_status(char board[]);
 int player_number(char player);
 char opposite_player(char player);
+int score(int status);
 
-// move minimax(int board[BOARD_SIZE], char player)
-// {
-//     int status = board_status(board);
 
-//     if (status > 0)
-//     {
-//         return {};
-//     }
+move minimax(char board[BOARD_SIZE], char player)
+{
+    int status = board_status(board);
 
-// }
+    if (status != 0)
+    {
+        move tmp = {.position = -1, .score = score(status)};
+        return tmp;
+    }
+
+    printf("%c\n", player);
+    move tmp = {.position = -100, .score = -100};
+    return tmp;
+}
 
 int main(int argc, char *argv[]) {
     if (argc != 2) { printf("INCULDE THE FILE\n"); return -1; }
@@ -32,9 +39,8 @@ int main(int argc, char *argv[]) {
     char board[10];
     read_input(board, argv[1]);
 
-    int status = board_status(board);
-    printf("%i\n", status);
-
+    int j = minimax(board, 'X').score;
+    printf("%i\n", j);
 }
 
 char opposite_player(char player)
@@ -62,7 +68,6 @@ int board_status(char board[])
     {
         if (board[i] == board[i + 1] && board[i] == board[i + 2] && board[i] != ' ')
         {
-            printf("%c %i %i %i\n", board[i], i, i + 1, i + 2);
             return player_number(board[i]);
         }
     }
@@ -72,7 +77,6 @@ int board_status(char board[])
     {
         if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ')
         {
-            printf("%c %i %i %i\n", board[i], i, i + 3, i + 6);
             return player_number(board[i]);
         }
     }
@@ -80,12 +84,10 @@ int board_status(char board[])
     // Check Diagonals
     if (board[0] == board[4] && board[0] == board[8] && board[4] != ' ')
     {
-        printf("%c 0 4 8\n", board[4]);
         return player_number(board[4]);
     }
     if (board[2] == board[4] && board[2] == board[6] && board[4] != ' ')
     {
-        printf("%c 2 4 6\n", board[4]);
         return player_number(board[4]);
     }
 
@@ -94,12 +96,10 @@ int board_status(char board[])
     {
         if (board[i] == ' ')
         {
-            printf("continue\n");
             return 0;
         }
     }
 
-    printf("tie\n");
     return -1;
 }
 
@@ -123,4 +123,10 @@ void read_input(char board[], char *file_name)
         }
     }
     board[9] = '\0';
+}
+
+int score(int status)
+{
+    return (-5 * status * status + 3 * status + 8) / 6;
+
 }
