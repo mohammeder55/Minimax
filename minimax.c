@@ -18,6 +18,7 @@ int board_status(char board[]);
 int player_number(char player);
 char opposite_player(char player);
 int score(int status);
+int minimax_bridge(char *board);
 
 // Returns the best move's position and score
 // It looks it all possible next moves and evaluate each one
@@ -119,6 +120,12 @@ int main(void) {
 
     int j = minimax(board, 'X', 0).position;
     printf("%i\n", j);
+}
+
+int minimax_bridge(char *board)
+{
+    // printf("|%s|", board);
+    return minimax(board, 'X', 0).position;
 }
 
 // Return the opposite player
