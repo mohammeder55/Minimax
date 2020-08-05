@@ -4,7 +4,7 @@
 
 void read_input(char board[], char *file_name);
 int board_status(char board[]);
-int parse_status(char player, int positions[]);
+int compose_status(char player, int positions[]);
 
 
 int main(int argc, char *argv[]) {
@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
 }
 
-int parse_status(char player, int positions[])
+int compose_status(char player, int positions[])
 {
     
 }
