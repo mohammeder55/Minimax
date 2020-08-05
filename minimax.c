@@ -1,10 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef struct
+{
+    int position;
+    int score;
+}
+move;
+
+const int BOARD_SIZE = 10;
+
 void read_input(char board[], char *file_name);
 int board_status(char board[]);
-int compose_status(char player, int positions[]);
+int player_number(char player);
+char opposite_player(char player);
 
+// move minimax(int board[BOARD_SIZE], char player)
+// {
+//     int status = board_status(board);
+
+//     if (status > 0)
+//     {
+//         return {};
+//     }
+
+// }
 
 int main(int argc, char *argv[]) {
     if (argc != 2) { printf("INCULDE THE FILE\n"); return -1; }
@@ -13,39 +33,26 @@ int main(int argc, char *argv[]) {
     read_input(board, argv[1]);
 
     int status = board_status(board);
-    printf("%04i\n", status);
+    printf("%i\n", status);
 
 }
 
-int compose_status(char player, int positions[])
+char opposite_player(char player)
 {
-    int player_number;
+    if (player == 'X')
+    {
+        return 'O';
+    }
+    return 'X';
+}
 
-    if (player == '-')
+int player_number(char player)
+{
+    if (player == 'X')
     {
-        return -1;
+        return 1;
     }
-    else if (player == '|')
-    {
-        return 0;
-    }
-    
-    else
-    {
-        if (player == 'X')
-        {
-            player_number = 1;
-        }
-        else if (player == 'O')
-        {
-            player_number = 2;
-        }
-
-        return 1000 * positions[0]
-            + 100 * positions[1]
-            + 10 * positions[2]
-            + player_number;
-    }
+    return 2;
 }
 
 int board_status(char board[])
@@ -56,8 +63,7 @@ int board_status(char board[])
         if (board[i] == board[i + 1] && board[i] == board[i + 2] && board[i] != ' ')
         {
             printf("%c %i %i %i\n", board[i], i, i + 1, i + 2);
-            int positions[3] = {i, i + 1, i + 2};
-            return compose_status(board[i], positions);
+            return player_number(board[i]);
         }
     }
 
@@ -67,9 +73,7 @@ int board_status(char board[])
         if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ')
         {
             printf("%c %i %i %i\n", board[i], i, i + 3, i + 6);
-
-            int positions[3] = {i, i + 3, i + 6};
-            return compose_status(board[i], positions);
+            return player_number(board[i]);
         }
     }
 
@@ -77,19 +81,13 @@ int board_status(char board[])
     if (board[0] == board[4] && board[0] == board[8] && board[4] != ' ')
     {
         printf("%c 0 4 8\n", board[4]);
-
-        int positions[3] = {0, 4, 8};
-        return compose_status(board[4], positions);
+        return player_number(board[4]);
     }
     if (board[2] == board[4] && board[2] == board[6] && board[4] != ' ')
     {
         printf("%c 2 4 6\n", board[4]);
-
-        int positions[3] = {2, 4, 6};
-        return compose_status(board[4], positions);
+        return player_number(board[4]);
     }
-
-    int positions[3] = {0, 0, 0};
 
     // Check for empty spot
     for (int i = 0; board[i] != '\0'; i++)
@@ -97,13 +95,12 @@ int board_status(char board[])
         if (board[i] == ' ')
         {
             printf("continue\n");
-
-            return compose_status('|', positions);
+            return 0;
         }
     }
 
     printf("tie\n");
-    return compose_status('-', positions);
+    return -1;
 }
 
 void read_input(char board[], char *file_name)
