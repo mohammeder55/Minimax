@@ -1,0 +1,8 @@
+minimax.c:
+	board_status:	board -> status
+	score:			status -> score
+	player_number:	letter -> number
+	minimax:		board, player -> move
+	main:			b -> minimax(b, 'X').score
+	minimax_bridge:	board -> minimax(board, 'X').score
+	file_input:		b -> board
