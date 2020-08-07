@@ -1,6 +1,7 @@
 from time import sleep
 from xo_basics import *
-from better_minimax import minimax
+# from better_minimax import minimax
+from minimax_bridge import minimax
 
 
 def main():
@@ -22,7 +23,7 @@ def main():
 		else:
 			# Just to not make it too quick
 			# sleep(.5)
-			i, j = minimax(board, 'X')['position']
+			i, j = minimax(board, 'X')
 
 		# If the chosen spot is available
 		if board[i][j] == ' ':

@@ -14,11 +14,11 @@ const int BOARD_SIZE = 10;
 
 // Prototypes
 void read_input(char board[], char *file_name);
-int board_status(char board[]);
+int board_status(char *board);
 int player_number(char player);
 char opposite_player(char player);
 int score(int status);
-int minimax_bridge(char *board);
+int minimax_bridge(char *board, char player);
 
 // Returns the best move's position and score
 // It looks it all possible next moves and evaluate each one
@@ -122,10 +122,10 @@ int main(void) {
     printf("%i\n", j);
 }
 
-int minimax_bridge(char *board)
+int minimax_bridge(char *board, char player)
 {
-    // printf("|%s|", board);
-    return minimax(board, 'X', 0).position;
+    // printf("|%s|\n", board);
+    return minimax(board, player, 0).position;
 }
 
 // Return the opposite player
@@ -154,7 +154,7 @@ int player_number(char player)
 // 1 or 2 if X or O had won
 // 0 in the game shall be continued
 // -1 if it is a tie
-int board_status(char board[])
+int board_status(char *board)
 {
     // Check horizontals
     for (int i = 0; i < 8; i += 3)
