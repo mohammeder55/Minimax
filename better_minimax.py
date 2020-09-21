@@ -1,4 +1,4 @@
-from xo_basics import board_status, opposite_player
+from basics import board_status, opposite_player
 from random import randint
 
 scores = {

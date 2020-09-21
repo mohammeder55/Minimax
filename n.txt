@@ -1,13 +1,16 @@
 minimax.c:
 	board_status:	board -> status
-	score:			status -> score
+	score:		status -> score
 	player_number:	letter -> number
-	minimax:		board, player -> move
-	main:			b -> minimax(b, 'X').score
+	minimax:	board, player -> move
+	main:		b -> minimax(b, 'X').score
 	minimax_bridge:	board, player -> minimax(board, player).score
-	file_input:		b -> board
+	file_input:	b -> board
 
-minimax_bridge.py:
-	c_board:		py_board -> c_board
-	file_ipnut:		b -> c_board
-	minimax:		py_board, player -> minimax_bridge(c_board, player)
+bridge.py:
+	c_board:	py_board -> c_board
+	file_ipnut:	b -> c_board
+	minimax:	py_board, player -> minimax_bridge(c_board, player)
+	board_status:	py_board -> py_status
+	position:	c_position -> py_position
+	status:		c_status -> py_status

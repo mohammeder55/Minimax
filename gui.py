@@ -1,7 +1,7 @@
 import tkinter as tk
-from xo_basics import *
+from basics import *
 from time import sleep
-from minimax_bridge import minimax
+from bridge import minimax
 
 # Initailizing
 root = tk.Tk()
@@ -128,15 +128,15 @@ def reset():
                 bg=colors[' '],
                 command=move_function(k, l)
             )
-    
+
     # If AI is to begin
     if current_player == 'X':
         AI_move()
 
 
 def AI_move():
-    tmp = minimax(board, 'X')
-    buttons[tmp.i][tmp.j].invoke()
+    i, j = minimax(board, 'X')
+    buttons[i][j].invoke()
 
 
 

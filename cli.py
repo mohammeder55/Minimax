@@ -1,7 +1,7 @@
 from time import sleep
-from xo_basics import *
+from basics import *
 # from better_minimax import minimax
-from minimax_bridge import minimax
+from bridge import minimax
 
 
 def main():
