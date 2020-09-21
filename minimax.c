@@ -1,5 +1,16 @@
+// Board statuses:
+// Unfinished: 2
+// X: 1
+// Tie: 0
+// O: -1
+// 
+// Board scores:
+// X: 1
+// Tie: 0
+// O: -1
+
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 
 // Define move structure
 typedef struct
@@ -9,48 +20,34 @@ typedef struct
 }
 move;
 
-// Board array's size
-const int BOARD_SIZE = 10;
-
 // Prototypes
 void read_input(char board[], char *file_name);
 int board_status(char *board);
-int player_number(char player);
+int status(char player);
 char opposite_player(char player);
-int score(int status);
 int minimax_bridge(char *board, char player);
 
-// Returns the best move's position and score
-// It looks it all possible next moves and evaluate each one
-//     If the the possible move finished the game, it is directly evaluated
-//     If it doesn't end the game
-//         it is evaluted by the best move after it if the move's player is X
-//         or by the worst if the player is O
-
-move minimax(char board[BOARD_SIZE], char player, int depth)
+move minimax(char board[], char player, int depth)
 {
-    // printf("%c\n", player);
     // BASE CASE
 
-    // Check the given board
-    int status = board_status(board);
+    // Lookup the status
+    int s = board_status(board);
 
-    // If there is no possible moves
-    if (status != 0)
+    // If the game is finshied
+    if (s != 2)
     {
         // Return the move's score
-        // No one cares about it's score
-        move tmp = {.position = -1, .score = score(status)};
+        // Score does not matter
+        move tmp = {.position = -1, .score = s};
         return tmp;
     }
 
     // PRE-RECURSION
 
     // Initiate an array of available moves
-    move avails[BOARD_SIZE - 1];
+    move avails[9];
     int avail_count = 0;
-
-    // printf("012345678\n%s|\n", board);
 
     // Iterate over the board
     for (int i = 0; board[i] != '\0'; i++)
@@ -60,13 +57,11 @@ move minimax(char board[BOARD_SIZE], char player, int depth)
         {
             // Append it to the availables
             avails[avail_count].position = i;
-            // printf("%i", i);
+
             // Move to the next move in availables
             avail_count++;
         }
     }
-
-    // printf("\n%p\n", avail);
 
     // RECURSION
 
@@ -85,7 +80,7 @@ move minimax(char board[BOARD_SIZE], char player, int depth)
 
     if (player == 'X')
     {
-        move best = {.position = -1, .score = -10};
+        move best = {.position = -10, .score = -10};
         for (int i = 0; i < avail_count; i++)
         {
             if (avails[i].score > best.score)
@@ -96,7 +91,7 @@ move minimax(char board[BOARD_SIZE], char player, int depth)
         return best;
     }
 
-    move worst = {.position = -1, .score = 10};
+    move worst = {.position = -10, .score = 10};
     for (int i = 0; i < avail_count; i++)
     {
         if (avails[i].score < worst.score)
@@ -105,9 +100,6 @@ move minimax(char board[BOARD_SIZE], char player, int depth)
         }
     }
     return worst;
-    // move tmp = {.position = -1, .score = score(status)};
-    // depth++;
-    // return tmp;
 }
 
 
@@ -116,7 +108,7 @@ int main(void) {
 
     read_input(board, "b");
 
-    // printf("%s|\n", board);
+    printf("%s|\n", board);
 
     int j = minimax(board, 'X', 0).position;
     printf("%i\n", j);
@@ -124,7 +116,6 @@ int main(void) {
 
 int minimax_bridge(char *board, char player)
 {
-    // printf("|%s|\n", board);
     return minimax(board, player, 0).position;
 }
 
@@ -138,22 +129,16 @@ char opposite_player(char player)
     return 'X';
 }
 
-// Return player's number
-// 1 for X
-// 2 for O
-int player_number(char player)
+// Return letter score
+int status(char player)
 {
     if (player == 'X')
     {
         return 1;
     }
-    return 2;
+    return -1;
 }
 
-// Return board status
-// 1 or 2 if X or O had won
-// 0 in the game shall be continued
-// -1 if it is a tie
 int board_status(char *board)
 {
     // Check horizontals
@@ -161,7 +146,7 @@ int board_status(char *board)
     {
         if (board[i] == board[i + 1] && board[i] == board[i + 2] && board[i] != ' ')
         {
-            return player_number(board[i]);
+            return status(board[i]);
         }
     }
 
@@ -170,18 +155,18 @@ int board_status(char *board)
     {
         if (board[i] == board[i + 3] && board[i] == board[i + 6] && board[i] != ' ')
         {
-            return player_number(board[i]);
+            return status(board[i]);
         }
     }
 
     // Check Diagonals
     if (board[0] == board[4] && board[0] == board[8] && board[4] != ' ')
     {
-        return player_number(board[4]);
+        return status(board[4]);
     }
     if (board[2] == board[4] && board[2] == board[6] && board[4] != ' ')
     {
-        return player_number(board[4]);
+        return status(board[4]);
     }
 
     // Check for empty spot
@@ -189,11 +174,11 @@ int board_status(char *board)
     {
         if (board[i] == ' ')
         {
-            return 0;
+            return 2;
         }
     }
 
-    return -1;
+    return 0;
 }
 
 // Read's the board file
@@ -205,7 +190,6 @@ void read_input(char board[], char *file_name)
 
     char buffer[12];
     fread(buffer, sizeof(char), 11, input);
-    // printf("%s|\n", buffer);
 
     // Iterate over buffer's characters
     for (int i = 0, j = 0; buffer[i] != '\0'; i++)
@@ -222,11 +206,4 @@ void read_input(char board[], char *file_name)
 
     // Terminate the board
     board[9] = '\0';
-}
-
-// Return the corresponding score of the status
-int score(int status)
-{
-    return (-5 * status * status + 3 * status + 8) / 6;
-
 }
