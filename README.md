@@ -1,10 +1,10 @@
 # Tic Tac Toe AI with Minimax Algorithm
 
-This is my implementation of tic tac toe AI, in which I implemented the AI in C and implemented game logic and GUI in python. I used Tkinter module for the GUI and ctypes to link C code to python
+This is my implementation of tic tac toe AI, in which I implemented the AI in C and implemented game logic and GUI in python. I used Tkinter module for the GUI and ctypes to link C code to python.
 
 ## Detail conserning the algorithm
 
-First things first, minimax algorithm is a search alogrithm that, for a given tic tac toe board, traces all possible moves searching for the best scenario move. The algorithm uses the following ranks by the following scheme
+First things first, minimax algorithm is a search alogrithm that, for a given tic tac toe board, traces all possible moves searching for the best scenario move. The algorithm uses the following ranks by the following scheme:
 
 - If the move ends the game:
     - 1 if the AI is wins
@@ -22,7 +22,7 @@ So, in a nutshell, it starts by going through all the possible move tha AI can m
 
 - **bridge.py**: This is the translation layer between C and Python, it takes python variables as input, converts it to C variable, and passes it to C code to handle it. Then it recieves the output of the algorithm and returns it as an output.
 
-- **basics.py**: Basic functions needed for the game flow
+- **basics.py**: Basic functions needed for the game flow.
 
 - **gui.py, cli.py**: Those are the implementation of game logic and user interface.
 
