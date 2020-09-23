@@ -18,16 +18,20 @@ def main():
 
     # Iterate over rows
     for i in range(3):
-        # Append the row to buttons list
+
+        # Append row to buttons list
         buttons.append([])
+
         # Iterate over row's buttons
         for j in range(3):
             # Place the empty button
-            buttons[i].append(placed_button(
-                i, j,
-                bg=colors[" "],
-                command=move_function(i, j)
-            ))
+            buttons[i].append(
+                place_button(
+                    i, j,
+                    bg=colors[" "],
+                    command=move_function(i, j)
+                )
+            )
 
 
 # Grid's colors
@@ -38,7 +42,7 @@ colors = {
 }
 
 # Returns a button placed on (i, j)
-def placed_button(i, j, bg='black', command=lambda: '', master=frame):
+def place_button(i, j, bg='black', command=lambda: '', master=frame):
     # Make the button
     out = tk.Button(
         master,
@@ -51,19 +55,26 @@ def placed_button(i, j, bg='black', command=lambda: '', master=frame):
     # Return the button
     return out
 
-# Returns the function of the button on (i, j) of regular moves
+# Returns a function that makes a move at (i, j)
 def move_function(i, j):
+
     # Define the function to be returned
-    def ph():
-        # In order to toggle the player
+    def tmp():
+        """
+            1. Checks if the spot is empty
+            2. Makes the move
+            3. Check if the game had finished, and behave accordingly
+        """
+
+        # To allow toggling the player
         global current_player
 
-        # Break if the spot isn't empty
+        # Exit if the spot isn't empty
         if board[i][j] != ' ': return
 
-        # Change the button's color
+        # Change button's color
         buttons[i][j].destroy()
-        buttons[i][j] = placed_button(
+        buttons[i][j] = place_button(
             i, j,
             bg=colors[current_player],
             command=move_function(i, j)
@@ -83,38 +94,35 @@ def move_function(i, j):
             # Iterate over all buttons
             for k in range(3):
                 for l in range(3):
-                    # Give the buttons the color of the winner
-                    # Further clicking resets the game 
+                    # Alter the button
                     buttons[k][l].destroy()
-                    buttons[k][l] = placed_button(
+                    buttons[k][l] = place_button(
                         k, l,
+                        # Don't change colors
                         bg=colors[status],
+                        # Further clicking resets the game 
                         command=reset
                     )
-            return
 
-        # If it is tie
+        # If it is a tie
         elif status == 'tie':
             for k in range(3):
                 for l in range(3):
                     # Give the buttons the color of the winner
                     # Further clicking resets the game 
                     buttons[k][l].destroy()
-                    buttons[k][l] = placed_button(
+                    buttons[k][l] = place_button(
                         k, l,
                         bg=colors[board[k][l]],
                         command=reset
                     )
-            # current_player = 'O'
-            return
 
         # If the game shall be continued
         else:
-            # If it is AI's turn
-            if current_player == 'X':
-                AI_move()
+            # If it is AI's turn, make a move
+            if current_player == 'X': AI_move()
 
-    return ph
+    return tmp
 
 
 # Resets the board and grid
@@ -123,19 +131,19 @@ def reset():
         for l in range(3):
             board[k][l] = ' '
             buttons[k][l].destroy()
-            buttons[k][l] = placed_button(
+            buttons[k][l] = place_button(
                 k, l,
                 bg=colors[' '],
                 command=move_function(k, l)
             )
 
-    # If AI is to begin
-    if current_player == 'X':
-        AI_move()
+    # Let AI make a move if it is his turn
+    if current_player == 'X': AI_move()
 
 
 def AI_move():
     i, j = minimax(board, 'X')
+    sleep(.1)
     buttons[i][j].invoke()
 
 
